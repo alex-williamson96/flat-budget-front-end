@@ -1,5 +1,10 @@
+import Header from "../../components/LandingPage/Header";
+
 const Home = () => {
-return <div className="text-4xl pt-10">Welcome to Flatbudget</div>
+    return (
+        <div>
+            <Header />
+        </div>)
 }
 
 export default Home;
