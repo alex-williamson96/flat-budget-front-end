@@ -1,12 +1,18 @@
 import { useRoute } from "wouter";
 import Logo from "../Icons/Logo";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import useIsMobile from "../../../hooks/useIsMobile";
 
 const Footer = () => {
   const [isBudget, params] = useRoute("/budget");
+  const {isMobile} = useIsMobile();
+  let footerPosition = '';
+
+  if (!isMobile) {
+    footerPosition = 'bottom-0'
+  }
   if (!isBudget) {
     return (
-      <footer className="footer p-6 bg-base-200 text-base-content fixed bottom-0">
+      <footer className={`footer p-6 bg-base-200 text-base-content absolute mt-4 ${footerPosition}`}>
         <div className="items-center grid-flow-col">
           <Logo />
           <p>Flatbudget © 2023 - All right reserved</p>

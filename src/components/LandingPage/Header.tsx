@@ -41,7 +41,7 @@ const Header = () => {
   }
 
   return (
-    <header className="fixed top-0 left-0 w-full shadow-md py-4 flex justify-between items-center bg-neutral px-4">
+    <header className="sticky top-0 left-0 w-full shadow-md py-4 flex justify-between items-center bg-neutral px-4">
       <div className="flex items-center">
         <h1 className="text-xl font-semibold text-white-800"><Link to='home'>Flatbudget</Link></h1>
         {linksNav}
