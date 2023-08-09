@@ -28,7 +28,6 @@ const Home = () => {
 
     return (
         <div>
-            <Header />
             <div className="text-6xl p-4 font-serif">
                 No app, no paywall,<br />just a simple budget
             </div>

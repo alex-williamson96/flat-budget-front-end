@@ -1,15 +1,29 @@
 import { useState } from "react";
+import AuthService from "../../services/security/auth-service";
+
+export interface UserSignup {
+  username: string,
+  password: string,
+  email: string,
+}
 
 const SignupFlow = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleCreateAccount = () => {
+  const onSubmit = () => {
     console.log(username, email, password);
     (document.getElementById('signupModal') as HTMLFormElement).close();
     (document.getElementById('loginModal') as HTMLFormElement).close();
 
+    const user = AuthService.register({ username, email, password }).then(
+      (res) => {
+        console.log('res:')
+        console.log(res)
+      }
+    );
+    console.log(user);
   }
 
   return (
@@ -38,7 +52,7 @@ const SignupFlow = () => {
         <label className="label">
         </label>
       </div>
-      <div className="btn btn-secondary" onClick={handleCreateAccount}>Create New Account</div>
+      <div className="btn btn-secondary" onClick={onSubmit}>Create New Account</div>
     </div>
   )
 }

@@ -8,11 +8,11 @@ const Footer = () => {
   let footerPosition = '';
 
   if (!isMobile) {
-    footerPosition = 'bottom-0'
+    footerPosition = 'bottom-0 fixed'
   }
   if (!isBudget) {
     return (
-      <footer className={`footer p-6 bg-base-200 text-base-content absolute mt-4 ${footerPosition}`}>
+      <footer className={`footer p-6 bg-base-200 text-base-content mt-4 ${footerPosition}`}>
         <div className="items-center grid-flow-col">
           <Logo />
           <p>Flatbudget © 2023 - All right reserved</p>
