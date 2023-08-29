@@ -1,22 +1,28 @@
 import { useState } from "react";
 import SignupFlow from './SignupFlow';
 import AuthService from "../../services/security/auth-service";
+import useAuthStore from "../../stores/authStore";
 
 const LoginFlow = () => {
   const [showCreate, setShowCreate] = useState(false);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const login = useAuthStore((state) => state.login);
+  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
 
   const onSubmit = () => {
     (document.getElementById('loginModal') as HTMLFormElement).close();
     console.log('hello')
     const user = AuthService.login(username, password).then(
       (res) => {
-        console.log('res:')
-        console.log(res)
+        console.log()
+        console.log('res: ', res)
+        localStorage.setItem("token", res.token)
+        console.log(isLoggedIn)
+        login()
+        console.log(isLoggedIn)
       }
     );
-    console.log(user);
   }
 
   const handleCreateAccount = () => {

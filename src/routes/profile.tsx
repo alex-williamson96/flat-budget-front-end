@@ -28,8 +28,6 @@ const useUser = (): UseQueryResult<AxiosResponse<UserProfile>> => {
 };
 
 const Profile = () => {
-  console.log(UserService.getCurrentUser)
-
   const { status, data } = useUser();
 
   return (

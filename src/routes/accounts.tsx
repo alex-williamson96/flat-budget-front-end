@@ -1,6 +1,9 @@
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
 import CreateAccount from "../components/Account/CreateAccount";
+import { UseQueryResult, useQuery } from "react-query";
+import UserService from "../services/user-service";
+import AccountService from "../services/account-service";
 
 export interface Account {
   id: number;
@@ -9,9 +12,17 @@ export interface Account {
   cents: number;
   onBudget: boolean;
   orderPosition: number;
-  createdDate: Date;
-  updatedDate: Date;
+  createdDate?: Date;
+  updatedDate?: Date;
 }
+
+const useAccounts = (): UseQueryResult<AxiosResponse<Account[]>> => {
+  return useQuery(
+    "account",
+    AccountService.findAll,
+    { staleTime: 300000 }
+  );
+};
 
 export default function Accounts({
   params,
@@ -20,95 +31,57 @@ export default function Accounts({
 }) {
   console.log(params.accountId);
 
-  const [accountList, setAccountList] = useState<any[]>([]);
+  const { status, data, error } = useAccounts();
 
-  // useEffect(() => {
-  //   const cancelToken = axios.CancelToken.source();
+  if (status === 'loading') {
+    return <div>Loading</div>
+  }
+  if (error) {
+    return <p>Error occurred while fetching data</p>;
+  }
 
-  //   axios
-  //     .get("/api/v1/account/all", { cancelToken: cancelToken.token })
-  //     .then((res) => {
-  //       console.log(res.data);
-  //       setAccountList(res.data);
-  //     })
-  //     .catch((err) => {
-  //       if (axios.isCancel(err)) {
-  //         console.log("canceled");
-  //       } else {
-  //         console.log(err);
-  //       }
-  //     });
-
-  //   return () => {
-  //     cancelToken.cancel();
-  //   };
-  // }, []);
-
-
-  const createAccount = () => {
-    const cancelToken = axios.CancelToken.source();
-
-    axios
-      .post(
-        "/api/v1/account/create",
-        { name: "accountName" },
-        { cancelToken: cancelToken.token }
-      )
-      .then((res) => {
-        console.log(res.data);
-        setAccountList((prev) => [...prev, res.data]);
-      })
-      .catch((err) => {
-        if (axios.isCancel(err)) {
-          console.log("canceled");
-        } else {
-          console.log(err);
+  const createAccountButton = () => {
+    return <><button
+      className="btn flex m-auto"
+      onClick={() => {
+        const modal = document.getElementById(
+          "createAccountModal"
+        ) as HTMLFormElement;
+        if (modal) {
+          modal.showModal();
         }
-      });
+      }}
+    >
+      Create Account
+    </button><dialog id="createAccountModal" className={`modal bg-transparent`}>
+        <form method="dialog" className={`modal-box modal-bottom sm:modal-middle`}>
+          <CreateAccount />
+          <div className="modal-action">
+            {/* if there is a button in form, it will close the modal */}
+            <button className="btn">
+              Close
+            </button>
+          </div>
+        </form>
+      </dialog>
+    </>
+  }
 
-    return () => {
-      cancelToken.cancel();
-    };
-  };
+  console.log('data: ', data);
 
-  if (accountList.length === 0) {
+  if (data.length === 0) {
     return (
-      <div>
-        No accounts found! Click here to create one!
-        <button
-          className="btn"
-          onClick={() => {
-            const modal = document.getElementById(
-              "createAccountModal"
-            ) as HTMLFormElement;
-            if (modal) {
-              modal.showModal();
-            }
-          }}
-        >
-          Create Account
-        </button>
-        <dialog id="createAccountModal" className={`modal bg-transparent`}>
-          <form method="dialog" className={`modal-box modal-bottom sm:modal-middle`}>
-            <CreateAccount />
-            <div className="modal-action">
-              {/* if there is a button in form, it will close the modal */}
-              <button className="btn">
-                Close
-              </button>
-            </div>
-          </form>
-        </dialog>
+      <div className="flex flex-col">
+        No accounts found! Click here to create one
+        {createAccountButton()}
       </div>
     );
   }
 
   return (
     <div>
-      <button className="btn" onClick={createAccount}>
-        Create New Account
-      </button>
-      Account {JSON.stringify(accountList)} works!
+      {createAccountButton()}
+      Account {JSON.stringify(data)} works!
     </div>
   );
 }

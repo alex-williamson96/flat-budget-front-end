@@ -1,18 +1,36 @@
-import axios from "axios";
+import axios, { AxiosInstance } from "axios";
 
 export class RequestHelper {
   private baseURL = "";
+  apiClient: AxiosInstance;
 
   constructor(baseUrl: string) {
     this.baseURL = baseUrl;
+    this.apiClient = axios.create({
+      baseURL: this.baseURL,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    this.apiClient.interceptors.request.use(
+      (config) => {
+        const token = localStorage.getItem("token");
+
+        if (token) {
+          config.headers["Authorization"] = `Bearer ${token}`;
+        }
+
+        return config;
+      },
+      (error) => {
+        return Promise.reject(error);
+      }
+    )
   }
 
-  apiClient = axios.create({
-    baseURL: this.baseURL,
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
+  
+
 
   newAbortSignal(timeoutMs: number) {
     const abortController = new AbortController();

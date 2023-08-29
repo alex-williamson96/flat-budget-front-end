@@ -21,7 +21,8 @@
     "react-dom": "^18.2.0",
     "react-query": "^3.39.3",
     "react-query-kit": "^1.4.5",
-    "wouter": "^2.11.0"
+    "wouter": "^2.11.0",
+    "zustand": "^4.4.1"
   },
   "devDependencies": {
     "@types/react": "^18.0.24",
