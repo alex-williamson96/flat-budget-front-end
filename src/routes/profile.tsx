@@ -19,7 +19,7 @@ export interface UserProfile {
   updatedDate: string;
 }
 
-const useUser = (): UseQueryResult<AxiosResponse<UserProfile>> => {
+const useUser = (): UseQueryResult<UserProfile> => {
   return useQuery(
     "user",
     UserService.getCurrentUser,

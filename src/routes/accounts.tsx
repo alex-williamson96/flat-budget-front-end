@@ -1,9 +1,9 @@
-import axios, { AxiosResponse } from "axios";
-import { useEffect, useState } from "react";
+
 import CreateAccount from "../components/Account/CreateAccount";
 import { UseQueryResult, useQuery } from "react-query";
-import UserService from "../services/user-service";
+
 import AccountService from "../services/account-service";
+import AccountTable from "../components/Account/AccountTable";
 
 export interface Account {
   id: number;
@@ -16,7 +16,7 @@ export interface Account {
   updatedDate?: Date;
 }
 
-const useAccounts = (): UseQueryResult<AxiosResponse<Account[]>> => {
+const useAccounts = (): UseQueryResult<Account[]> => {
   return useQuery(
     "account",
     AccountService.findAll,
@@ -32,6 +32,7 @@ export default function Accounts({
   console.log(params.accountId);
 
   const { status, data, error } = useAccounts();
+  console.log(data);
 
   if (status === 'loading') {
     return <div>Loading</div>
@@ -69,11 +70,14 @@ export default function Accounts({
 
   console.log('data: ', data);
 
+  if (data === undefined) {
+    return <div>Error loading data</div>
+  }
+
   if (data.length === 0) {
     return (
       <div className="flex flex-col">
         No accounts found! Click here to create one
-        {createAccountButton()}
       </div>
     );
   }
@@ -81,7 +85,10 @@ export default function Accounts({
   return (
     <div>
       {createAccountButton()}
-      Account {JSON.stringify(data)} works!
+      {data.map((data) => (
+        <AccountTable key={data.id} accountData={data} />
+      ))}
     </div>
+    
   );
 }
