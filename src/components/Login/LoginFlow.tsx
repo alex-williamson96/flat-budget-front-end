@@ -12,7 +12,6 @@ const LoginFlow = () => {
 
   const onSubmit = () => {
     (document.getElementById('loginModal') as HTMLFormElement).close();
-    console.log('hello')
     const user = AuthService.login(username, password).then(
       (res) => {
         console.log()

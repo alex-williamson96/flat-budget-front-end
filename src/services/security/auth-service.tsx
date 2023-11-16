@@ -1,4 +1,5 @@
 import { UserSignup } from "../../components/Login/SignupFlow";
+import useAuthStore from "../../stores/authStore";
 import { RequestHelper } from "../requests";
 
 const baseURL = "http://localhost:8080/api/v1/security/auth";
@@ -19,7 +20,7 @@ const register = async (user: UserSignup) => {
 }
 
 const refreshToken = async () => {
-  return await requestHelper.post('/refreshtoken', {});
+  return await requestHelper.post('/refreshToken', {});
 
 }
 

@@ -1,9 +1,10 @@
 import { Account } from '../../routes/accounts';
 import CurrencyDisplay from '../UI/Helper/CurrencyDisplay';
+import TransactionRow from './TransactionRow';
 
 const AccountTable = ({ accountData }: { accountData: Account }) => {
 
-  console.log(accountData)
+
 
   return (
     <div className="pb-2">
@@ -25,13 +26,9 @@ const AccountTable = ({ accountData }: { accountData: Account }) => {
           </thead>
           <tbody>
             {/* row 1 */}
-            <tr>
-              <th>1</th>
-              <td>Cy Ganderton</td>
-              <td>Quality Control Specialist</td>
-              <td>Blue</td>
-              <td>Blue</td>
-            </tr>
+            {accountData.transactionList.map(
+              (transaction: any) => <TransactionRow key={transaction.id} transactionData={transaction} />
+            )}
             {/* row 2 */}
             <tr>
               <th>2</th>

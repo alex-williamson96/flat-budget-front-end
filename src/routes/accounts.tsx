@@ -12,8 +12,9 @@ export interface Account {
   cents: number;
   onBudget: boolean;
   orderPosition: number;
-  createdDate?: Date;
-  updatedDate?: Date;
+  createdDate: Date;
+  updatedDate: Date;
+  transactionList: any;
 }
 
 const useAccounts = (): UseQueryResult<Account[]> => {
@@ -24,15 +25,9 @@ const useAccounts = (): UseQueryResult<Account[]> => {
   );
 };
 
-export default function Accounts({
-  params,
-}: {
-  params: { accountId: string };
-}) {
-  console.log(params.accountId);
+export default function Accounts() {
 
   const { status, data, error } = useAccounts();
-  console.log(data);
 
   if (status === 'loading') {
     return <div>Loading</div>
@@ -68,8 +63,6 @@ export default function Accounts({
     </>
   }
 
-  console.log('data: ', data);
-
   if (data === undefined) {
     return <div>Error loading data</div>
   }
@@ -89,6 +82,6 @@ export default function Accounts({
         <AccountTable key={data.id} accountData={data} />
       ))}
     </div>
-    
+
   );
 }
