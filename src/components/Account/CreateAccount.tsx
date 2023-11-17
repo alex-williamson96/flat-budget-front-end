@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import AccountService from "../../services/account-service";
 import { Account } from "../../routes/accounts";
 
@@ -12,9 +12,13 @@ const CreateAccount = () => {
   const [startingBalance, setStartingBalance] = useState('');
   const [onBudget, setAccountType] = useState(true);
 
+  const queryClient = useQueryClient();
+
   const createAccountMutation = useMutation({
     mutationFn: (params: AccountMutationParams) => {
+
       return AccountService.create(params.newAccountData)
+        .finally(() => queryClient.invalidateQueries({ queryKey: ["accounts"] }));
     },
   })
 
@@ -32,9 +36,10 @@ const CreateAccount = () => {
       onBudget: onBudget,
       id: 0,
       orderPosition: 0,
+      transactionList: undefined
     }
 
-    createAccountMutation.mutate({newAccountData: newAccount})
+    createAccountMutation.mutate({ newAccountData: newAccount })
   }
 
   return (

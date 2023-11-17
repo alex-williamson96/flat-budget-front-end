@@ -4,10 +4,13 @@ import { Account } from "../../../routes/accounts";
 import { UseQueryResult, useQuery } from "react-query";
 import CurrencyDisplay from "../../UI/Helper/CurrencyDisplay";
 import { useEffect, useState } from "react";
+import { useAccountFiltering } from "../../../hooks/useAccountFiltering";
 
-const useAccounts = (): UseQueryResult<Account[]> => {
+export type AccountOverview = Pick<Account, 'id' | 'name' | 'dollar' | 'cents' | 'orderPosition' | 'onBudget'>
+
+const useAccounts = (): UseQueryResult<AccountOverview[]> => {
   return useQuery(
-    "account",
+    "accounts",
     AccountService.findAll,
     { staleTime: 300000 }
   );
@@ -15,19 +18,19 @@ const useAccounts = (): UseQueryResult<Account[]> => {
 
 export default function TopNavBarDropDown() {
 
-  // const accounts: Promise<Exclude<Account, "createdDate" | "updatedDate">[]> = 
-
   const { status, data, error } = useAccounts();
 
   const [dollarTotal, setDollarTotal] = useState(0)
   const [centsTotal, setCentsTotal] = useState(0)
+
+  const { budgetAccounts, trackingAccounts } = useAccountFiltering(data || [])
 
   useEffect(() => {
     if (data && Array.isArray(data)) {
       let totalDollars = 0;
       let totalCents = 0;
 
-      data.forEach((account: Account) => {
+      data.forEach((account: AccountOverview) => {
         totalDollars += account.dollar;
         totalCents += account.cents;
       });
@@ -35,7 +38,7 @@ export default function TopNavBarDropDown() {
       setDollarTotal(totalDollars);
       setCentsTotal(totalCents);
     }
-  }, [data]);
+  }, []);
 
   if (status === 'loading') {
     return <div>Loading</div>
@@ -44,36 +47,48 @@ export default function TopNavBarDropDown() {
     return <p>Error occurred while fetching data</p>;
   }
 
-  if (data === undefined) {
-    return <div>Error loading data</div>
-  }
-
-  const sortedAccounts = [...data].sort((a, b) => a.orderPosition - b.orderPosition);
-
-
-
   return (
     <label className="dropdown dropdown-hover border-solid">
       <Link href="/accounts">
-        <label tabIndex={0} className="btn m-1 btn-sm btn-neutral">
+        <label tabIndex={0} className="btn m-1 btn-sm btn-neutral  lg:btn-lg">
           Accounts
         </label>
       </Link>
       <ul
         tabIndex={0}
-        className="dropdown-content menu p-2 bg-primary-focus rounded-box border-2 border-primary w-max text-left"
+        className="dropdown-content menu p-2 bg-base-300 lg:text-md rounded-box border-2 border-primary w-max text-left"
       >
-        <li className="w-full bg-secondary-focus rounded-lg">
-          <Link className="block w-full" href={'/accounts'}>Accounts Total
+        <li className="w-full bg-secondary-focus rounded-lg p-1">
+          <Link className="block w-full" href={'/accounts'}>
+            <span className="pr-4">Accounts Total</span>
             <span className="float-right">
               <CurrencyDisplay dollar={dollarTotal} cents={centsTotal} />
             </span>
           </Link>
         </li>
-        {sortedAccounts.map((account) => {
+        <div className="divider">Budget Accounts</div>
+        {budgetAccounts.map((account) => {
           return (
-            <li key={account.id} className="w-full">
-              <Link className="block w-full" href={'/accounts/' + account.id}>{account.name}
+            <li key={account.id} className="w-full pl-2 pr-2 pb-2">
+              <Link className="block w-full" href={'/accounts/' + account.id}>
+                <span className="pr-4">
+                  {account.name}
+                </span>
+                <span className="float-right">
+                  <CurrencyDisplay dollar={account.dollar} cents={account.cents} />
+                </span>
+              </Link>
+            </li>
+          )
+        })}
+        <div className="divider">Tracking Accounts</div>
+        {trackingAccounts.map((account) => {
+          return (
+            <li key={account.id} className="w-full pl-2 pr-2 pb-2">
+              <Link className="block w-full" href={'/accounts/' + account.id}>
+                <span className="pr-4">
+                  {account.name}
+                </span>
                 <span className="float-right">
                   <CurrencyDisplay dollar={account.dollar} cents={account.cents} />
                 </span>

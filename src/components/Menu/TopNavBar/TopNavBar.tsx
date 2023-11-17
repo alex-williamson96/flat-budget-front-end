@@ -5,7 +5,7 @@ import { Link } from "wouter";
 
 export default function TopNavBar() {
   return (
-    <div className="w-full navbar z-50 bg-base-300 opacity-100 fixed top-0 left-0">
+    <div className="w-full navbar z-50 bg-base-300 opacity-100 fixed top-0 left-0 lg:pr-16 lg:pl-16">
       <div className="flex-none lg:hidden">
         <label htmlFor="my-drawer-3" className="btn btn-square btn-ghost">
           <svg
@@ -25,28 +25,28 @@ export default function TopNavBar() {
       </div>
       <div className="flex-1 px-2 m-1">
         <Link href="/budget">
-          <label tabIndex={0} className="btn btn-sm btn-primary">
+          <label tabIndex={0} className="btn btn-sm btn-primary lg:btn-lg">
             Flat Budget
           </label>
         </Link>
-        <label tabIndex={0} className="card-compact">
+        {/* <label tabIndex={0} className="card-compact">
           <span>
             <span>
               <LeftArrow /> Hello <RightArrow />
             </span>
           </span>
-        </label>
+        </label> */}
       </div>
       <div className="flex-none hidden lg:block">
         <ul className="menu menu-horizontal">
           <TopNavBarDropDown />
           <Link href="/reports">
-            <label tabIndex={0} className="btn m-1 btn-sm btn-neutral">
+            <label tabIndex={0} className="btn m-1 btn-sm btn-neutral lg:btn-lg">
               Reports
             </label>
           </Link>
           <Link href="/profile">
-            <label tabIndex={0} className="btn m-1 btn-sm btn-neutral">
+            <label tabIndex={0} className="btn m-1 btn-sm btn-neutral lg:btn-lg">
               Profile
             </label>
           </Link>

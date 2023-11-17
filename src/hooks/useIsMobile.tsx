@@ -25,7 +25,7 @@ const useIsMobile = (breakpoint = 640) => {
         window.removeEventListener('reload', handlePageResized);
       }
     };
-  }, []);
+  }, [window.innerWidth]);
 
   return {
     isMobile,

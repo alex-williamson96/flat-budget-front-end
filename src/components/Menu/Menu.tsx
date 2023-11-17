@@ -12,6 +12,7 @@ export default function Menu() {
       <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content flex flex-col mt-16 pt-2.5 pl-2.5 h-auto">
         <TopNavBar />
+        <div className="lg:pb-8"></div>
         <Route path="/budget" component={Budget} />
         <Route path="/reports" component={Reports} />
         <Route path="/accounts" component={Accounts} />

@@ -29,6 +29,6 @@ export default function AccountOverview() {
   console.log(data)
 
   return (
-    <AccountTable accountData={data} />
+    <AccountTable accountData={data} isOverview={false}/>
   )
 }
