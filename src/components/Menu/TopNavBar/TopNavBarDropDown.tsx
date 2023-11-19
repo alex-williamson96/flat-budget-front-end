@@ -38,7 +38,7 @@ export default function TopNavBarDropDown() {
       setDollarTotal(totalDollars);
       setCentsTotal(totalCents);
     }
-  }, []);
+  }, [data]); // TODO: fix this infinte loop!!
 
   if (status === 'loading') {
     return <div>Loading</div>
