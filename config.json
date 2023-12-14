@@ -1,0 +1,6 @@
+{
+  "domain": "dev-6wl1wpmozwfs0k78.us.auth0.com",
+  "clientId": "2MPnJVZ2NzhclV6GPu8J5mt0iBEz01jF",
+  "audience": "localhost:8080/api",
+  "scope": "read:messages openid profile email"
+}

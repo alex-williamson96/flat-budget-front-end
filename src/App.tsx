@@ -8,10 +8,68 @@ import Header from "./components/LandingPage/Header";
 import Menu from "./components/Menu/Menu";
 import Footer from "./components/UI/Footer/Footer";
 import useAuthStore from "./stores/authStore";
+import { useAuth0 } from "@auth0/auth0-react";
+import { useEffect, useState } from "react";
+import authConfig from '../config.json'
 
 function App() {
-  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
-  if (isLoggedIn) {
+  // const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+
+  const [accessToken, setAccessToken] = useState(null);
+
+  const {
+    isLoading,
+    error,
+    isAuthenticated,
+    user,
+    getAccessTokenSilently,
+    loginWithRedirect,
+    logout,
+
+  } = useAuth0();
+
+  useEffect(() => {
+    const getAccessToken = async () => {
+      try {
+        const accessToken = await getAccessTokenSilently().catch(data => data);
+        setAccessToken(accessToken);
+        console.log('accessToken: ', accessToken)
+        localStorage.setItem('token', accessToken)
+      } catch (e: any) {
+        console.log(e)
+      }
+    };
+    getAccessToken();
+  }, [getAccessTokenSilently]);
+
+
+
+  const securedAPITest = () => {
+    fetch("http://localhost:8080/auth0/private", {
+      method: "GET",
+      headers: new Headers({
+        Authorization: "Bearer " + accessToken,
+        "Content-Type": "application/json",
+      }),
+    })
+      .then(function (res) {
+        return res.json();
+      })
+      .then(function (resJson) {
+        console.log(resJson)
+      })
+      .catch((e) => console.log(e));
+  };
+
+  if (error) {
+    return <div>Oops... {error.message}</div>;
+  }
+
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
+
+  if (isAuthenticated) {
     return (
       <div>
         <Menu />

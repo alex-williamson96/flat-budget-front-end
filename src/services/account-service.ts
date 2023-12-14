@@ -18,7 +18,7 @@ const findById = async (id: string) => {
 };
 
 const create = async (account: Account) => {
-  return await requestHelper.post("/create", account);
+  return await requestHelper.post("", account);
 };
 
 const AccountService = {

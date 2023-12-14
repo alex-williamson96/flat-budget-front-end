@@ -20,25 +20,13 @@ export default function TopNavBarDropDown() {
 
   const { status, data, error } = useAccounts();
 
-  const [dollarTotal, setDollarTotal] = useState(0)
-  const [centsTotal, setCentsTotal] = useState(0)
+  console.log(data)
 
-  const { budgetAccounts, trackingAccounts } = useAccountFiltering(data || [])
+  // const [dollarTotal, setDollarTotal] = useState(0)
+  // const [centsTotal, setCentsTotal] = useState(0)
 
-  useEffect(() => {
-    if (data && Array.isArray(data)) {
-      let totalDollars = 0;
-      let totalCents = 0;
+  // const { budgetAccounts, trackingAccounts } = useAccountFiltering(data || [])
 
-      data.forEach((account: AccountOverview) => {
-        totalDollars += account.dollar;
-        totalCents += account.cents;
-      });
-
-      setDollarTotal(totalDollars);
-      setCentsTotal(totalCents);
-    }
-  }, [data]); // TODO: fix this infinte loop!!
 
   if (status === 'loading') {
     return <div>Loading</div>
@@ -54,7 +42,7 @@ export default function TopNavBarDropDown() {
           Accounts
         </label>
       </Link>
-      <ul
+      {/* <ul
         tabIndex={0}
         className="dropdown-content menu p-2 bg-base-300 lg:text-md rounded-box border-2 border-primary w-max text-left"
       >
@@ -96,13 +84,22 @@ export default function TopNavBarDropDown() {
             </li>
           )
         })}
-        {/* <li className="w-full">
-          <Link className="block w-full" href="/accounts/1">Amex Gold: <span className="float-right"> -$1,205.97</span></Link>
-        </li>
-        <li className="w-full">
-          <Link className="block w-full" href="/accounts/2">Item 2: <span className="float-right">$1,230.34</span></Link>
-        </li> */}
-      </ul>
+      </ul>  */}
     </label>
   );
 }
+
+// useEffect(() => {
+//   if (data && Array.isArray(data)) {
+//     let totalDollars = 0;
+//     let totalCents = 0;
+
+//     data.forEach((account: AccountOverview) => {
+//       totalDollars += account.dollar;
+//       totalCents += account.cents;
+//     });
+
+//     setDollarTotal(totalDollars);
+//     setCentsTotal(totalCents);
+//   }
+// }, [data]); // TODO: fix this infinte loop!!
