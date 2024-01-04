@@ -20,7 +20,6 @@ export class RequestHelper {
 
         if (token) {
           config.headers["Authorization"] = `Bearer ${token}`;
-          console.log(`TESTINGGGGGGGGGGGGGGGGGGGGGGGGGGGG: Bearer ${token}`);
         }
 
         return config;

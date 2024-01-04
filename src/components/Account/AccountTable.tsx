@@ -2,13 +2,13 @@ import { Account } from '../../routes/accounts';
 import CurrencyDisplay from '../UI/Helper/CurrencyDisplay';
 import TransactionRow from './transaction/TransactionRow';
 
-const AccountTable = ({ accountData, isOverview }: { accountData: Account, isOverview: Boolean }) => {
+const AccountTable = ({ accountData, isOverview, isTracking }: { accountData: Account, isOverview: Boolean, isTracking: Boolean }) => {
 
   return (
     <div className="pb-2">
       <div className='flex p-2 items-center'>
-        <span className='text-2xl pr-4'>{accountData.name}</span>
-        <span className='text-xl pr-4'>Balance: {<CurrencyDisplay dollar={accountData.dollar} cents={accountData.cents} />}</span>
+        <span className='text-2xl p-2 border rounded border-base-200 border-r'>{accountData.name}</span>
+        <span className='text-xl pl-4'>Balance: {<CurrencyDisplay dollar={accountData.dollar} cents={accountData.cents} />}</span>
         {!isOverview && <button className='btn btn-primary'>Add transaction</button>}
       </div>
       <div className="overflow-x-scroll">
@@ -32,7 +32,7 @@ const AccountTable = ({ accountData, isOverview }: { accountData: Account, isOve
           </tbody>
         </table>
       </div>
-      <div className="divider divider-primary"></div>
+      <div className={isTracking ? "divider divider-secondary" : "divider divider-primary"}></div>
     </div>)
 
 }

@@ -20,12 +20,10 @@ export default function TopNavBarDropDown() {
 
   const { status, data, error } = useAccounts();
 
-  console.log(data)
+  const [dollarTotal, setDollarTotal] = useState(0)
+  const [centsTotal, setCentsTotal] = useState(0)
 
-  // const [dollarTotal, setDollarTotal] = useState(0)
-  // const [centsTotal, setCentsTotal] = useState(0)
-
-  // const { budgetAccounts, trackingAccounts } = useAccountFiltering(data || [])
+  const { budgetAccounts, trackingAccounts } = useAccountFiltering(data || [])
 
 
   if (status === 'loading') {
@@ -42,7 +40,7 @@ export default function TopNavBarDropDown() {
           Accounts
         </label>
       </Link>
-      {/* <ul
+      <ul
         tabIndex={0}
         className="dropdown-content menu p-2 bg-base-300 lg:text-md rounded-box border-2 border-primary w-max text-left"
       >
@@ -84,7 +82,7 @@ export default function TopNavBarDropDown() {
             </li>
           )
         })}
-      </ul>  */}
+      </ul> 
     </label>
   );
 }

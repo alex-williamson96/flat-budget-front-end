@@ -33,7 +33,6 @@ function App() {
       try {
         const accessToken = await getAccessTokenSilently().catch(data => data);
         setAccessToken(accessToken);
-        console.log('accessToken: ', accessToken)
         localStorage.setItem('token', accessToken)
       } catch (e: any) {
         console.log(e)

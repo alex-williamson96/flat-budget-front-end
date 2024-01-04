@@ -84,11 +84,11 @@ export default function Accounts() {
       {createAccountButton()}
       <div className="divider sm:text-2xl">Budget Accounts</div>
       {budgetAccounts.map((data) => (
-        <AccountTable key={data.id} accountData={data as Account} isOverview={true} />
+        <AccountTable key={data.id} accountData={data as Account} isOverview={true} isTracking={false}/>
       ))}
       <div className="divider sm:text-2xl">Tracking Accounts</div>
       {trackingAccounts.map((data) => (
-        <AccountTable key={data.id} accountData={data as Account} isOverview={true} />
+        <AccountTable key={data.id} accountData={data as Account} isOverview={true} isTracking={true}/>
       ))}
     </div>
 

@@ -15,7 +15,7 @@ export const useAccountFiltering = (accounts: (Account | AccountOverview)[]): {
     setBudgetAccounts(sortedAccounts.filter(account => account.onBudget))
     setTrackingAccounts(sortedAccounts.filter(account => !account.onBudget))
 
-  }, [accounts])
+  }, [accounts.length])
 
   return { budgetAccounts: budgetAccounts, trackingAccounts: trackingAccounts }
 }
