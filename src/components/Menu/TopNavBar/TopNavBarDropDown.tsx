@@ -20,11 +20,23 @@ export default function TopNavBarDropDown() {
 
   const { status, data, error } = useAccounts();
 
-  const [dollarTotal, setDollarTotal] = useState(0)
-  const [centsTotal, setCentsTotal] = useState(0)
-
   const { budgetAccounts, trackingAccounts } = useAccountFiltering(data || [])
 
+  const budgetAccountsDollarTotal = budgetAccounts.reduce((accumulator, currentValue) => {
+    return accumulator + currentValue.dollar;
+  }, 0)
+
+  const budgetAccountsCentsTotal = budgetAccounts.reduce((accumulator, currentValue) => {
+    return accumulator + currentValue.cents;
+  }, 0)
+
+  const trackingAccountsDollarTotal = budgetAccounts.reduce((accumulator, currentValue) => {
+    return accumulator + currentValue.dollar;
+  }, 0)
+
+  const trackingAccountsCentsTotal = budgetAccounts.reduce((accumulator, currentValue) => {
+    return accumulator + currentValue.cents;
+  }, 0)
 
   if (status === 'loading') {
     return <div>Loading</div>
@@ -48,7 +60,7 @@ export default function TopNavBarDropDown() {
           <Link className="block w-full" href={'/accounts'}>
             <span className="pr-4">Accounts Total</span>
             <span className="float-right">
-              <CurrencyDisplay dollar={dollarTotal} cents={centsTotal} />
+              <CurrencyDisplay dollar={budgetAccountsDollarTotal + trackingAccountsDollarTotal} cents={budgetAccountsCentsTotal + trackingAccountsCentsTotal} />
             </span>
           </Link>
         </li>
@@ -82,7 +94,7 @@ export default function TopNavBarDropDown() {
             </li>
           )
         })}
-      </ul> 
+      </ul>
     </label>
   );
 }

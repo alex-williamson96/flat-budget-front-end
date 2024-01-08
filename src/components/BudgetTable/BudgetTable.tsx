@@ -1,4 +1,5 @@
-const BudgetTable = () => {
+const BudgetTable = ({ budget }: { budget: any }) => {
+  console.log(budget);
   return (
     <div className="overflow-x-auto">
       <table className="table table-compact w-full table-auto">
