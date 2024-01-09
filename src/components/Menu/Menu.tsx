@@ -13,7 +13,7 @@ export default function Menu() {
       <div className="drawer-content flex flex-col mt-16 pt-2.5 pl-2.5 h-auto">
         <TopNavBar />
         <div className="lg:pb-8"></div>
-        <Route path="/budget" component={Budget} />
+        <Route path="/budget/:year/:month" component={Budget} />
         <Route path="/reports" component={Reports} />
         <Route path="/accounts" component={Accounts} />
         <Route path="/accounts/:accountId" component={AccountOverview} />

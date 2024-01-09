@@ -1,4 +1,4 @@
-import { Params, useParams } from 'wouter';
+import { useParams } from 'wouter';
 import AccountService from '../../services/account-service';
 import { UseQueryResult, useQuery } from 'react-query';
 import { Account } from '../../routes/accounts';
@@ -29,6 +29,6 @@ export default function AccountOverview() {
   console.log(data)
 
   return (
-    <AccountTable accountData={data} isOverview={false}/>
+    <AccountTable accountData={data} isOverview={false} isTracking={data.onBudget} />
   )
 }

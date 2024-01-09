@@ -2,8 +2,17 @@ import TopNavBarDropDown from "./TopNavBarDropDown";
 import LeftArrow from "../../UI/Icons/LeftArrow";
 import RightArrow from "../../UI/Icons/RightArrow";
 import { Link } from "wouter";
+import { useState } from "react";
+
+const months = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"];
+
 
 export default function TopNavBar() {
+
+  const date = new Date();
+
+  const [budgetDate, setBudgetDate] = useState(date.getFullYear() + "/" + months[date.getMonth()])
+
   return (
     <div className="w-full navbar z-50 bg-base-300 opacity-100 fixed top-0 left-0 lg:pr-16 lg:pl-16">
       <div className="flex-none lg:hidden">
@@ -24,7 +33,7 @@ export default function TopNavBar() {
         </label>
       </div>
       <div className="flex-1 px-2 m-1">
-        <Link href="/budget">
+        <Link href={`/budget/${budgetDate}`}>
           <label tabIndex={0} className="btn btn-sm btn-primary lg:btn-lg">
             Flat Budget
           </label>

@@ -57,7 +57,6 @@ export default function Accounts() {
           <form method="dialog" className={`modal-box modal-bottom sm:modal-middle`}>
             <CreateAccount />
             <div className="modal-action">
-              {/* if there is a button in form, it will close the modal */}
               <button className="btn">
                 Close
               </button>

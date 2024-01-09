@@ -6,7 +6,7 @@ import TransactionRow from './transaction/TransactionRow';
 const AccountTable = ({ accountData, isOverview, isTracking }: { accountData: Account, isOverview: Boolean, isTracking: Boolean }) => {
 
   return (
-    <div>
+    <div className='p-1'>
       <div className='pt-4 pb-4 pl-2 pr-2 rounded border border-base-300 bg-neutral'>
         <div className='flex p-2 items-center'>
           <Link to={`/accounts/${accountData.id.toString()}`}>
@@ -36,7 +36,6 @@ const AccountTable = ({ accountData, isOverview, isTracking }: { accountData: Ac
           </table>
         </div>
       </div>
-      <div className={isTracking ? "divider divider-secondary" : "divider divider-primary"}></div>
     </div>
   )
 

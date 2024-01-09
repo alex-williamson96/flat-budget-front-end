@@ -1,7 +1,7 @@
 import { useState } from "react";
 import SignupFlow from './SignupFlow';
 import AuthService from "../../services/security/auth-service";
-import useAuthStore from "../../stores/authStore";
+import useAuthStore from "../../stores/auth-store";
 
 const LoginFlow = () => {
   const [showCreate, setShowCreate] = useState(false);

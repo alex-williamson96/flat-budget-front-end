@@ -7,7 +7,7 @@ import { Switch, Route } from "wouter";
 import Header from "./components/LandingPage/Header";
 import Menu from "./components/Menu/Menu";
 import Footer from "./components/UI/Footer/Footer";
-import useAuthStore from "./stores/authStore";
+import useAuthStore from "./stores/auth-store";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect, useState } from "react";
 import authConfig from '../config.json'
