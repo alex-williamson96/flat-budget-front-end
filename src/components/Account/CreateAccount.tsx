@@ -23,9 +23,6 @@ const CreateAccount = () => {
   })
 
   const createAccount = () => {
-    console.log('Account Name:', accountName);
-    console.log('Starting Balance:', startingBalance);
-    console.log('Account Type:', onBudget);
 
     const [dollarString, centsString] = startingBalance.toString().split('.');
 

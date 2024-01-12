@@ -8,8 +8,6 @@ const LoginButton = () => {
     // <ModalButtonTemplate template={<LoginFlow />} uniqueModalName="loginModal" buttonText="Log in" />
     <button className="btn btn-primary" onClick={() => loginWithRedirect().finally(
       () => {
-        console.log('0000000000000000000000000')
-        console.log()
         return;
       }
     )}>Log In</button>

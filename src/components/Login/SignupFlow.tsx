@@ -19,11 +19,9 @@ const SignupFlow = () => {
 
     const user = AuthService.register({ username, email, password }).then(
       (res) => {
-        console.log('res:')
-        console.log(res)
+
       }
     );
-    console.log(user);
   }
 
   return (

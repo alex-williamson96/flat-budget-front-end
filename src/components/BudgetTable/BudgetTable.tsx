@@ -1,4 +1,5 @@
 import { BudgetTableDto, Category } from "../../routes/budget";
+import useBudgetStore from "../../stores/budget-store";
 import BudgetTableSection from "./BudgetTableSection";
 
 interface CategorizedCategories {
@@ -6,16 +7,15 @@ interface CategorizedCategories {
 }
 
 const BudgetTable = ({ budget: budgetTable }: { budget: BudgetTableDto }) => {
+  console.log(useBudgetStore(state => state.budgetDollar))
 
   const categorizedCategories = budgetTable.categoryList.reduce<CategorizedCategories>((result, category) => {
     const { mainOrder } = category;
 
-    // Create an array for each mainOrder if it doesn't exist
     if (!result[mainOrder]) {
       result[mainOrder] = [];
     }
 
-    // Push the category into the respective mainOrder array
     result[mainOrder].push(category);
 
     return result;
@@ -44,7 +44,7 @@ const BudgetTable = ({ budget: budgetTable }: { budget: BudgetTableDto }) => {
           )
         })}
       </table>
-      
+
     </div>
   );
 }

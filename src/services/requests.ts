@@ -55,7 +55,7 @@ export class RequestHelper {
       .then((res) => res.data)
       .catch((err) => {
         if (axios.isCancel(err)) {
-          console.log("canceled");
+          return;
         }
         return err;
       });

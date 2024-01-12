@@ -32,8 +32,6 @@ const useUser = (): UseQueryResult<UserProfile> => {
 const Profile = () => {
   const { status, data } = useUser();
 
-  console.log(data)
-
   const { user, isAuthenticated, isLoading, getAccessTokenSilently } = useAuth0();
 
   if (isLoading) {

@@ -1,5 +1,7 @@
+import { useEffect } from "react";
 import { Category } from "../../routes/budget";
 import CurrencyDisplay from "../UI/Helper/CurrencyDisplay";
+import useBudgetStore from "../../stores/budget-store";
 
 interface BudgetTableRowProps {
   category: Category;
@@ -13,6 +15,16 @@ interface BudgetTableRowProps {
 }
 
 const BudgetTableRow = (props: BudgetTableRowProps) => {
+
+  const updateAssignedDollars = useBudgetStore((state) => state.updateAssignedDollar)
+  const updateAssignedCents = useBudgetStore((state) => state.updateAssignedCents)
+  const d = useBudgetStore(state => state.assignedDollar)
+
+  useEffect(() => {
+    updateAssignedCents(props.sumCentsAssigned)
+    updateAssignedDollars(props.sumDollarsAssigned)
+
+  }, [props.sumDollarsAssigned, props.sumCentsAssigned])
 
   if (props.category.subOrder === 0) {
 

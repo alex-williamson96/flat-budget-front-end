@@ -1,9 +1,7 @@
 import { UseQueryResult, useQuery } from "react-query";
 import BudgetService from "../services/budget-service";
-import useBudgetStore from "../stores/budget-store";
 import BudgetTable from "../components/BudgetTable/BudgetTable";
-import useLocation from "wouter/use-location";
-import { useParams, useRoute } from "wouter";
+import { useParams } from "wouter";
 
 export interface Budget {
   id: number;
@@ -80,13 +78,15 @@ const Budget = () => {
 
   const budgetTableList = budget.budgetTableList;
 
+  
+
   if (month) {
     return (
       budgetTableList.map(
         budgetTable => (
           (budgetTable.month === month && budgetTable.year === year) &&
-          <div className="p-2">
-            <BudgetTable key={budgetTable.id} budget={budgetTable} />
+          <div className="p-2" key={budgetTable.id}>
+            <BudgetTable budget={budgetTable} />
           </div>
         )
       )
@@ -94,7 +94,7 @@ const Budget = () => {
   }
 
 
-  return <div>Testing</div>
+  return <div>Error Loading Budget</div>
 }
 
 export default Budget;

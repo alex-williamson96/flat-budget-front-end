@@ -5,6 +5,7 @@ import { UseQueryResult, useQuery } from "react-query";
 import CurrencyDisplay from "../../UI/Helper/CurrencyDisplay";
 import { useEffect, useState } from "react";
 import { useAccountFiltering } from "../../../hooks/useAccountFiltering";
+import useBudgetStore from "../../../stores/budget-store";
 
 export type AccountOverview = Pick<Account, 'id' | 'name' | 'dollar' | 'cents' | 'orderPosition' | 'onBudget'>
 
@@ -37,6 +38,23 @@ export default function TopNavBarDropDown() {
   const trackingAccountsCentsTotal = budgetAccounts.reduce((accumulator, currentValue) => {
     return accumulator + currentValue.cents;
   }, 0)
+
+  const updateBudgetDollar = useBudgetStore((state) => state.setBudgetDollar)
+  const updateBudgetCents = useBudgetStore((state) => state.setBudgetCents)
+
+  useEffect(() => {
+    console.log('this is run dollars' + budgetAccountsDollarTotal)
+
+    updateBudgetDollar(budgetAccountsDollarTotal)
+
+  }, [budgetAccountsDollarTotal])
+
+  useEffect(() => {
+    console.log('this is run cents')
+
+    updateBudgetCents(budgetAccountsCentsTotal)
+
+  }, [budgetAccountsCentsTotal])
 
   if (status === 'loading') {
     return <div>Loading</div>

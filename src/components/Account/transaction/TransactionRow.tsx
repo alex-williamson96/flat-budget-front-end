@@ -2,8 +2,6 @@ import { useEffect, useState } from "react";
 import CurrencyDisplay from "../../UI/Helper/CurrencyDisplay";
 
 export default function TransactionRow({ transactionData }: { transactionData: Transaction }) {
-  console.log(transactionData)
-
   const [incomeDollar, setIncomeDollar] = useState(0)
   const [incomeCents, setIncomeCents] = useState(0)
 

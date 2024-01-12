@@ -2,16 +2,25 @@ import TopNavBarDropDown from "./TopNavBarDropDown";
 import LeftArrow from "../../UI/Icons/LeftArrow";
 import RightArrow from "../../UI/Icons/RightArrow";
 import { Link } from "wouter";
-import { useState } from "react";
+import CurrencyDisplay from "../../UI/Helper/CurrencyDisplay";
+import useBudgetStore from '../../../stores/budget-store';
 
-const months = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"];
 
 
 export default function TopNavBar() {
 
-  const date = new Date();
 
-  const [budgetDate, setBudgetDate] = useState(date.getFullYear() + "/" + months[date.getMonth()])
+  const assignDollar = useBudgetStore((state) => state.assignedDollar)
+  const assignCents = useBudgetStore((state) => state.assignedCents)
+
+  const budgetDollar = useBudgetStore((state) => state.budgetDollar)
+  const budgetCents = useBudgetStore((state) => state.budgetCents)
+
+  const budgetYear = useBudgetStore((state) => state.year)
+  const budgetMonth = useBudgetStore((state) => state.month)
+  const budgetDate = budgetYear + "/" + budgetMonth
+
+
 
   return (
     <div className="w-full navbar z-50 bg-base-300 opacity-100 fixed top-0 left-0 lg:pr-16 lg:pl-16">
@@ -38,6 +47,8 @@ export default function TopNavBar() {
             Flat Budget
           </label>
         </Link>
+        <span className="pl-2"><button className="btn btn-sm lg:btn-lg btn-success">Assign <CurrencyDisplay dollar={budgetDollar - assignDollar} cents={budgetCents - assignCents} /></button></span>
+
         {/* <label tabIndex={0} className="card-compact">
           <span>
             <span>

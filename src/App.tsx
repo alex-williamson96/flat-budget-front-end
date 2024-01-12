@@ -55,9 +55,8 @@ function App() {
         return res.json();
       })
       .then(function (resJson) {
-        console.log(resJson)
       })
-      .catch((e) => console.log(e));
+      .catch((e) => console.error(e));
   };
 
   if (error) {

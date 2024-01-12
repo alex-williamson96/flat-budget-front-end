@@ -26,8 +26,6 @@ export default function AccountOverview() {
     return <p>Error occurred while fetching data</p>;
   }
 
-  console.log(data)
-
   return (
     <AccountTable accountData={data} isOverview={false} isTracking={data.onBudget} />
   )
