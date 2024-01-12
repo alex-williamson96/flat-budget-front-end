@@ -18,7 +18,7 @@ const BudgetTableRow = (props: BudgetTableRowProps) => {
 
     return (
       <thead>
-        <tr className="bg-base-300">
+        <tr className="bg-base-200">
           <th className="w-0">
             <input type="checkbox" className="checkbox" />
           </th>

@@ -10,7 +10,7 @@ export default function Menu() {
   return (
     <div className="drawer">
       <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
-      <div className="drawer-content flex flex-col mt-16 pt-2.5 pl-2.5 h-auto">
+      <div className="drawer-content flex flex-col mt-16 pt-2.5 h-auto">
         <TopNavBar />
         <div className="lg:pb-8"></div>
         <Route path="/budget/:year/:month" component={Budget} />

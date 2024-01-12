@@ -23,10 +23,10 @@ const BudgetTable = ({ budget: budgetTable }: { budget: BudgetTableDto }) => {
 
 
   return (
-    <div className="overflow-x-auto">
+    <div className="overflow-x-auto rounded-lg border border-neutral">
       <table className="table table-compact w-full table-auto">
         <thead>
-          <tr className="hover">
+          <tr className="bg-base-300 text-base-content text-lg">
             <th className="w-0">
               <input type="checkbox" className="checkbox" />
             </th>
@@ -44,6 +44,7 @@ const BudgetTable = ({ budget: budgetTable }: { budget: BudgetTableDto }) => {
           )
         })}
       </table>
+      
     </div>
   );
 }

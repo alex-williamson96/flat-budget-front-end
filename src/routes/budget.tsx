@@ -84,7 +84,10 @@ const Budget = () => {
     return (
       budgetTableList.map(
         budgetTable => (
-          (budgetTable.month === month && budgetTable.year === year) && <BudgetTable key={budgetTable.id} budget={budgetTable} />
+          (budgetTable.month === month && budgetTable.year === year) &&
+          <div className="p-2">
+            <BudgetTable key={budgetTable.id} budget={budgetTable} />
+          </div>
         )
       )
     )

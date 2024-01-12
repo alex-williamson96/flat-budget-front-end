@@ -2,23 +2,23 @@ import { useEffect, useState } from "react";
 import CurrencyDisplay from "../../UI/Helper/CurrencyDisplay";
 
 export default function TransactionRow({ transactionData }: { transactionData: Transaction }) {
+  console.log(transactionData)
 
   const [incomeDollar, setIncomeDollar] = useState(0)
   const [incomeCents, setIncomeCents] = useState(0)
 
   const [expenseDollar, setExpenseDollar] = useState(0)
-  const [ExpenseCents, setExpenseCents] = useState(0)
+  const [expenseCents, setExpenseCents] = useState(0)
 
   useEffect(() => {
     if (!transactionData.isOutflow) {
       setIncomeDollar(transactionData.dollar);
       setIncomeCents(transactionData.cents);
-    } else {
-      setExpenseDollar(transactionData.dollar)
-      setExpenseCents(transactionData.cents)
+      return;
     }
 
-
+    setExpenseDollar(transactionData.dollar)
+    setExpenseCents(transactionData.cents)
 
   }, [transactionData.dollar, transactionData.cents])
 
@@ -31,7 +31,7 @@ export default function TransactionRow({ transactionData }: { transactionData: T
       <td>{transactionData.name}</td>
       <td>{transactionData.note}</td>
       <td><CurrencyDisplay dollar={incomeDollar} cents={incomeCents} /></td>
-      <td><CurrencyDisplay dollar={expenseDollar} cents={ExpenseCents} /></td>
+      <td><CurrencyDisplay dollar={expenseDollar} cents={expenseCents} /></td>
     </tr>
   )
 }
