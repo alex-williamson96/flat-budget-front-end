@@ -2,10 +2,10 @@ import { useEffect } from "react";
 import { Category } from "../../routes/budget";
 import CurrencyDisplay from "../UI/Helper/CurrencyDisplay";
 import useBudgetStore from "../../stores/budget-store";
+import BudgetTableInput from "./BudgetTableInput";
 
 interface BudgetTableRowProps {
   category: Category;
-  index: number;
   sumDollarsAssigned: number;
   sumCentsAssigned: number;
   sumDollarsActivity: number;
@@ -14,19 +14,27 @@ interface BudgetTableRowProps {
   sumCentsAvailable: number;
 }
 
-const BudgetTableRow = (props: BudgetTableRowProps) => {
+const BudgetTableRow = ({
+  category,
+  sumDollarsAssigned,
+  sumCentsAssigned,
+  sumDollarsActivity,
+  sumCentsActivity,
+  sumDollarsAvailable,
+  sumCentsAvailable }: BudgetTableRowProps) => {
 
   const updateAssignedDollars = useBudgetStore((state) => state.updateAssignedDollar)
   const updateAssignedCents = useBudgetStore((state) => state.updateAssignedCents)
-  const d = useBudgetStore(state => state.assignedDollar)
 
   useEffect(() => {
-    updateAssignedCents(props.sumCentsAssigned)
-    updateAssignedDollars(props.sumDollarsAssigned)
+    updateAssignedCents(sumCentsAssigned)
+    updateAssignedDollars(sumDollarsAssigned)
 
-  }, [props.sumDollarsAssigned, props.sumCentsAssigned])
+    console.log('this is running')
 
-  if (props.category.subOrder === 0) {
+  }, [sumDollarsAssigned, sumCentsAssigned])
+
+  if (category.subOrder === 0) {
 
     return (
       <thead>
@@ -34,11 +42,11 @@ const BudgetTableRow = (props: BudgetTableRowProps) => {
           <th className="w-0">
             <input type="checkbox" className="checkbox" />
           </th>
-          <th className="text-base-content text-xl">{props.category.name}</th>
+          <th className="text-base-content text-xl">{category.name}</th>
           <th></th>
-          <th><CurrencyDisplay dollar={props.sumDollarsAssigned} cents={props.sumCentsAssigned} /></th>
-          <th><CurrencyDisplay dollar={props.sumDollarsActivity} cents={props.sumCentsActivity} /></th>
-          <th><CurrencyDisplay dollar={props.sumDollarsAvailable} cents={props.sumCentsAvailable} /></th>
+          <th><CurrencyDisplay dollar={sumDollarsAssigned} cents={sumCentsAssigned} /></th>
+          <th><CurrencyDisplay dollar={sumDollarsActivity} cents={sumCentsActivity} /></th>
+          <th><CurrencyDisplay dollar={sumDollarsAvailable} cents={sumCentsAvailable} /></th>
         </tr>
       </thead>
     )
@@ -50,11 +58,11 @@ const BudgetTableRow = (props: BudgetTableRowProps) => {
         <th className="w-0">
           <input type="checkbox" className="checkbox" />
         </th>
-        <th>{props.category.name}</th>
-        <th>{props.category.notes}</th>
-        <th><CurrencyDisplay dollar={props.category.dollarAssigned} cents={props.category.centsAssigned} /></th>
-        <th><CurrencyDisplay dollar={props.category.dollarActivity} cents={props.category.centsActivity} /></th>
-        <th><CurrencyDisplay dollar={props.category.dollarAvailable} cents={props.category.centsActivity} /></th>
+        <th>{category.name}</th>
+        <th>{category.notes}</th>
+        <th><BudgetTableInput dollar={category.dollarAssigned} cents={category.centsAssigned} /></th>
+        <th><CurrencyDisplay dollar={category.dollarActivity} cents={category.centsActivity} /></th>
+        <th><CurrencyDisplay dollar={category.dollarAvailable} cents={category.centsActivity} /></th>
       </tr>
     </tbody>
   );

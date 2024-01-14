@@ -15,11 +15,10 @@ const BudgetTableSection = ({ categoryList: categoryList }: { categoryList: Cate
 
 
   return (
-    categoryList.map((category, index) => (
+    categoryList.map((category) => (
       <BudgetTableRow
         key={category.id}
         category={category}
-        index={index}
         sumDollarsAssigned={sumDollarsAssigned}
         sumCentsAssigned={sumCentsAssigned}
         sumDollarsActivity={sumDollarsActivity}

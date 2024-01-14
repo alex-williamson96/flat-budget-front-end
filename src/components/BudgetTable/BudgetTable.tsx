@@ -7,8 +7,6 @@ interface CategorizedCategories {
 }
 
 const BudgetTable = ({ budget: budgetTable }: { budget: BudgetTableDto }) => {
-  console.log(useBudgetStore(state => state.budgetDollar))
-
   const categorizedCategories = budgetTable.categoryList.reduce<CategorizedCategories>((result, category) => {
     const { mainOrder } = category;
 

@@ -20,6 +20,8 @@ export default function TopNavBar() {
   const budgetMonth = useBudgetStore((state) => state.month)
   const budgetDate = budgetYear + "/" + budgetMonth
 
+  const updateAssignedDollar = useBudgetStore(state => state.updateAssignedDollar)
+  const updateAssignedCents = useBudgetStore(state => state.updateAssignedCents)
 
 
   return (

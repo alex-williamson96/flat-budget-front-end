@@ -43,18 +43,11 @@ export default function TopNavBarDropDown() {
   const updateBudgetCents = useBudgetStore((state) => state.setBudgetCents)
 
   useEffect(() => {
-    console.log('this is run dollars' + budgetAccountsDollarTotal)
-
     updateBudgetDollar(budgetAccountsDollarTotal)
-
-  }, [budgetAccountsDollarTotal])
-
-  useEffect(() => {
-    console.log('this is run cents')
-
     updateBudgetCents(budgetAccountsCentsTotal)
 
-  }, [budgetAccountsCentsTotal])
+  }, [budgetAccountsDollarTotal, budgetAccountsCentsTotal])
+
 
   if (status === 'loading') {
     return <div>Loading</div>
