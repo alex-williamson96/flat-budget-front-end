@@ -42,7 +42,7 @@ const BudgetRowNameModal = ({
       id={`button-${categoryId}`}
       className="modal modal-bottom sm:modal-middle"
     >
-      <div className="modal-box w-auto">
+      <div className="modal-box sm:w-auto">
         <label className="form-control w-full max-w-xs">
           <div className="label">
             <span className="label-text">Update category name:</span>

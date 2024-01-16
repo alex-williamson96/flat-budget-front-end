@@ -4,6 +4,9 @@ import BudgetTableInput from "./BudgetTableInput";
 import CategoryService from "../../../services/category-service";
 import { useMutation, useQueryClient } from "react-query";
 import BudgetRowName from "./BudgetRowName";
+import { useState } from "react";
+import useIsMobile from "../../../hooks/useIsMobile";
+import NewCategoryButton from "./NewCategoryButton";
 
 export interface Currency {
   dollar: number;
@@ -39,6 +42,10 @@ const BudgetTableRow = ({
   // const { setAssignedDollar, setAssignedCents } = useBudgetStore();
 
   const queryClient = useQueryClient();
+
+  const [isHovered, setIsHovered] = useState(false);
+
+  const { isMobile } = useIsMobile();
 
   const { mutate: updateCategoryAssignedValues } = useMutation(
     async (category: Category) =>
@@ -76,12 +83,16 @@ const BudgetTableRow = ({
 
   if (category.subOrder === 0) {
     return (
-      <thead>
+      <thead className="group">
         <tr className="bg-base-200">
           <th className="w-0">
             <input type="checkbox" className="checkbox" />
           </th>
-          <th className="text-base-content text-xl">
+          <th
+            className="text-base-content text-xl relative"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+          >
             {
               <BudgetRowName
                 categoryId={category.id}
@@ -89,6 +100,21 @@ const BudgetTableRow = ({
                 onCategoryNameChange={handleRowNameChange}
               />
             }
+            <span
+              className={`pl-2 tooltip ${
+                isHovered || isMobile
+                  ? "visible opacity-100"
+                  : "invisible opacity-0"
+              }`}
+              data-tip="Add new category"
+            >
+              {
+                <NewCategoryButton
+                  mainOrder={category.mainOrder}
+                  categoryId={category.id}
+                />
+              }
+            </span>
           </th>
           <th></th>
           <th>
