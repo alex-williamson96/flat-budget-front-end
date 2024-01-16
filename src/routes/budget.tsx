@@ -78,17 +78,15 @@ const Budget = () => {
     return "Error loading budget :(";
   }
 
-  const budgetTableList = budget.budgetTableList;
-
-  // setBudgetTables(budgetTableList)
-
   if (month) {
-    return budgetTableList.map(
+    return budget.budgetTableList.map(
       (budgetTable) =>
         budgetTable.month === month &&
         budgetTable.year === year && (
           <div className="p-2" key={budgetTable.id}>
-            <BudgetTable budgetTable={budgetTable} />
+            <BudgetTable
+              budgetTable={budgetTable}
+            />
           </div>
         )
     );

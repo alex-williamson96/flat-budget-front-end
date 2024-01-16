@@ -1,3 +1,4 @@
+import { AddCategoryRequestObject as createCategoryRequestObject } from "../components/BudgetTable/budget-row/NewCategoryModal";
 import { Account } from "../routes/accounts";
 import { Category } from "../routes/budget";
 import { RequestHelper } from "./requests";
@@ -18,8 +19,10 @@ const findById = async (id: string) => {
   return await requestHelper.get(`/${id}`);
 };
 
-const create = async (account: Account) => {
-  return await requestHelper.post("", account);
+const createAccount = async (
+  categoryRequestObject: createCategoryRequestObject
+) => {
+  return await requestHelper.post("", categoryRequestObject);
 };
 
 const updateAssignedValues = async (category: Category) => {
@@ -33,6 +36,7 @@ const updateCategoryName = async (name: string, id: number) => {
 const CategoryService = {
   updateAssignedValues,
   updateCategoryName,
+  createAccount,
 };
 
 export default CategoryService;

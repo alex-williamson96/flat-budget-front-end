@@ -1,17 +1,19 @@
 import { useState } from "react";
 import useBudgetStore from "../../../stores/budget-store";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import { Category } from "../../../routes/budget";
+import CategoryService from "../../../services/category-service";
 
 interface NewCategoryModalProps {
   mainOrder: number;
   categoryId: number;
 }
 
-interface AddCategoryPayLoad {
+export interface AddCategoryRequestObject {
   year: string;
   month: string;
   name: string;
+  mainOrder: number;
 }
 
 const NewCategoryModal = ({ mainOrder, categoryId }: NewCategoryModalProps) => {
@@ -19,12 +21,29 @@ const NewCategoryModal = ({ mainOrder, categoryId }: NewCategoryModalProps) => {
 
   const [categoryName, setCategoryName] = useState("");
 
+  const queryClient = useQueryClient();
+
   const { mutate: addNewCateogry } = useMutation(
-    async ({ year: year, month: month, name: name }: AddCategoryPayLoad) => null
+    async (createAccountRequest: AddCategoryRequestObject) =>
+      CategoryService.createAccount(createAccountRequest),
+    {
+      onSuccess: () => {
+        queryClient.refetchQueries({ queryKey: ["budget"] });
+        const modal = document.getElementById(
+          `button-${categoryId}-new`
+        ) as HTMLFormElement;
+        modal.close();
+      },
+    }
   );
 
   const handleSubmit = () => {
-    console.log("submitted!");
+    addNewCateogry({
+      year: year,
+      month: month,
+      name: categoryName,
+      mainOrder: mainOrder,
+    });
   };
 
   return (

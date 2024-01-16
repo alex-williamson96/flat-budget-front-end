@@ -21,13 +21,6 @@ const BudgetTableSection = ({
 
   const [updateUseEffect, setUpdateUseEffect] = useState(0);
 
-  const {
-    updateAssignedDollar,
-    updateAssignedCents,
-    setAssignedDollar,
-    setAssignedCents,
-  } = useBudgetStore();
-
   useEffect(() => {
     const newSumDollarsAssigned = categoryList.reduce(
       (totalDollars, category) => totalDollars + category.dollarAssigned,
@@ -48,9 +41,6 @@ const BudgetTableSection = ({
     const newSumDollarsAvailable =
       newSumDollarsAssigned - newSumDollarsActivity;
     const newSumCentsAvailable = newSumCentsAssigned - newSumCentsActivity;
-
-    updateAssignedDollar(newSumDollarsAssigned);
-    updateAssignedCents(newSumCentsAssigned);
 
     setSumDollarsAssigned(newSumDollarsAssigned);
     setSumCentsAssigned(newSumCentsAssigned);
