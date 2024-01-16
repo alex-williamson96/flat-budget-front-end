@@ -2,14 +2,16 @@ import React, { createRef, useRef } from "react";
 import { useState } from "react";
 import CurrencyInput, { CurrencyInputOnChangeValues } from "react-currency-input-field";
 import useBudgetStore from "../../stores/budget-store";
+import { Currency } from "./BudgetTableRow";
 
 interface BudgetTableInputProps {
   dollar: number;
   cents: number;
+  onAssignedChanged: (currency: Currency) => void;
 }
 
-const BudgetTableInput = ({ dollar, cents }: BudgetTableInputProps) => {
-  const [value, setValue] = useState(`${dollar}.${cents}`)
+const BudgetTableInput = ({ dollar, cents, onAssignedChanged }: BudgetTableInputProps) => {
+  const [value, setValue] = useState(`${dollar}.${cents > 9 ? cents : '0' + cents}`)
   const [prevValue, setPrevValue] = useState(value)
   const [isSubmitted, setIsSubmitted] = useState(true);
 
@@ -29,8 +31,6 @@ const BudgetTableInput = ({ dollar, cents }: BudgetTableInputProps) => {
       return;
     }
 
-    console.log('this is running')
-
     const negativeModifier = newValue[0] === '-' ? -1 : 1;
 
     const [dollar, cents] = newValue.split(".")
@@ -40,6 +40,10 @@ const BudgetTableInput = ({ dollar, cents }: BudgetTableInputProps) => {
 
     updateAssignedDollar(parseInt(dollar))
     updateAssignedCents(negativeModifier * parseInt(cents))
+
+
+    const [dollarValue, centsValue] = value.split(".")
+    onAssignedChanged({ dollar: parseInt(dollarValue), cents: parseInt(centsValue) })
   }
 
   const handleCancel = () => {

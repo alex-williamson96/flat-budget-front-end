@@ -6,19 +6,25 @@ interface CategorizedCategories {
   [mainOrder: number]: Category[];
 }
 
-const BudgetTable = ({ budget: budgetTable }: { budget: BudgetTableDto }) => {
-  const categorizedCategories = budgetTable.categoryList.reduce<CategorizedCategories>((result, category) => {
-    const { mainOrder } = category;
+interface BudgetTableProps {
+  budgetTable: BudgetTableDto;
+}
 
-    if (!result[mainOrder]) {
-      result[mainOrder] = [];
-    }
+const BudgetTable = ({ budgetTable }: BudgetTableProps) => {
+  const categorizedCategories =
+    budgetTable.categoryList.reduce<CategorizedCategories>(
+      (result, category) => {
+        const { mainOrder } = category;
 
-    result[mainOrder].push(category);
+        if (!result[mainOrder]) {
+          result[mainOrder] = [];
+        }
 
-    return result;
-  }, {});
-
+        result[mainOrder].push(category);
+        return result;
+      },
+      {}
+    );
 
   return (
     <div className="overflow-x-auto rounded-lg border border-neutral">
@@ -35,16 +41,19 @@ const BudgetTable = ({ budget: budgetTable }: { budget: BudgetTableDto }) => {
             <th>Available</th>
           </tr>
         </thead>
-        {Object.keys(categorizedCategories).map(mainOrder => {
+        {Object.keys(categorizedCategories).map((mainOrder) => {
           const categories = categorizedCategories[parseInt(mainOrder, 10)];
           return (
-            <BudgetTableSection key={mainOrder} categoryList={categories} />
-          )
+            <BudgetTableSection
+              key={mainOrder}
+              categoryList={categories}
+              budgetTableId={budgetTable.id}
+            />
+          );
         })}
       </table>
-
     </div>
   );
-}
+};
 
 export default BudgetTable;

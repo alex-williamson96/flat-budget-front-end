@@ -38,11 +38,19 @@ export class RequestHelper {
   }
 
   get = async (url: string): Promise<any> => {
+    const cancelToken = axios.CancelToken.source();
+
     return this.apiClient
       .get<any>(this.baseURL + url, {
         signal: this.newAbortSignal(5000),
       })
-      .then((res) => res.data);
+      .then((res) => res.data)
+      .catch((err) => {
+        if (axios.isCancel(err)) {
+          cancelToken.cancel();
+        }
+        throw err;
+      });
   };
 
   post = (url: string, body: any) => {
@@ -55,9 +63,27 @@ export class RequestHelper {
       .then((res) => res.data)
       .catch((err) => {
         if (axios.isCancel(err)) {
+          cancelToken.cancel();
           return;
         }
-        return err;
+        throw err;
+      });
+  };
+
+  put = (url: string, body: any) => {
+    const cancelToken = axios.CancelToken.source();
+
+    return this.apiClient
+      .put<any>(this.baseURL + url, body, {
+        signal: this.newAbortSignal(5000),
+      })
+      .then((res) => res.data)
+      .catch((err) => {
+        if (axios.isCancel(err)) {
+          cancelToken.cancel();
+          return;
+        }
+        throw err;
       });
   };
 }

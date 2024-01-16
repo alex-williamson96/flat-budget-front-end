@@ -3,26 +3,69 @@ import LeftArrow from "../../UI/Icons/LeftArrow";
 import RightArrow from "../../UI/Icons/RightArrow";
 import { Link } from "wouter";
 import CurrencyDisplay from "../../UI/Helper/CurrencyDisplay";
-import useBudgetStore from '../../../stores/budget-store';
+import useBudgetStore from "../../../stores/budget-store";
+import { UseQueryResult, useQuery } from "react-query";
+import BudgetService from "../../../services/budget-service";
+import { Currency } from "../../BudgetTable/BudgetTableRow";
 
+const useCategoryAmount = (
+  budgetYear: string,
+  budgetMonth: string
+): UseQueryResult<Currency> => {
+  return useQuery(
+    "categoryAmount",
+    () => BudgetService.getBudgetAmount(budgetYear, budgetMonth),
+    {
+      staleTime: 600000,
+    }
+  );
+};
 
+const useAccoutsAmount = (): UseQueryResult<Currency> => {
+  return useQuery("accountsAmount", () => BudgetService.getAssignedAmount(), {
+    staleTime: 600000,
+  });
+};
 
 export default function TopNavBar() {
+  const budgetYear = useBudgetStore((state) => state.year);
+  const budgetMonth = useBudgetStore((state) => state.month);
+  const budgetDate = budgetYear + "/" + budgetMonth;
 
+  const {
+    data: budgetAmount,
+    status: budgetAmountStatus,
+    error: budgetAmountError,
+  } = useAccoutsAmount();
 
-  const assignDollar = useBudgetStore((state) => state.assignedDollar)
-  const assignCents = useBudgetStore((state) => state.assignedCents)
+  const {
+    data: assignedAmount,
+    status: assignedAmountStatus,
+    error: assignedAmountError,
+  } = useCategoryAmount(budgetYear, budgetMonth);
 
-  const budgetDollar = useBudgetStore((state) => state.budgetDollar)
-  const budgetCents = useBudgetStore((state) => state.budgetCents)
+  const loadingAssign = () => {
+    return <p>Loading...</p>;
+  };
 
-  const budgetYear = useBudgetStore((state) => state.year)
-  const budgetMonth = useBudgetStore((state) => state.month)
-  const budgetDate = budgetYear + "/" + budgetMonth
+  const errorLoadingAssign = () => {
+    return <p>Error :(</p>;
+  };
 
-  const updateAssignedDollar = useBudgetStore(state => state.updateAssignedDollar)
-  const updateAssignedCents = useBudgetStore(state => state.updateAssignedCents)
-
+  const assingedAmountDisplay = () => {
+    if (assignedAmount === undefined || budgetAmount === undefined) {
+      return <p>Undefined</p>;
+    }
+    return (
+      <>
+        Assign{" "}
+        <CurrencyDisplay
+          dollar={budgetAmount.dollar - assignedAmount.dollar}
+          cents={budgetAmount.cents - assignedAmount.cents}
+        />
+      </>
+    );
+  };
 
   return (
     <div className="w-full navbar z-50 bg-base-300 opacity-100 fixed top-0 left-0 lg:pr-16 lg:pl-16">
@@ -49,7 +92,19 @@ export default function TopNavBar() {
             Flat Budget
           </label>
         </Link>
-        <span className="pl-2"><button className="btn btn-sm lg:btn-lg btn-success">Assign <CurrencyDisplay dollar={budgetDollar - assignDollar} cents={budgetCents - assignCents} /></button></span>
+        <span className="pl-2">
+          <button className="btn btn-sm lg:btn-lg btn-success">
+            {assignedAmountStatus === "loading" ||
+            budgetAmountStatus === "loading"
+              ? loadingAssign()
+              : assignedAmountError ||
+                budgetAmountError ||
+                budgetAmountStatus === "error" ||
+                assignedAmountStatus === "error"
+              ? errorLoadingAssign()
+              : assingedAmountDisplay()}
+          </button>
+        </span>
 
         {/* <label tabIndex={0} className="card-compact">
           <span>
@@ -63,12 +118,18 @@ export default function TopNavBar() {
         <ul className="menu menu-horizontal">
           <TopNavBarDropDown />
           <Link href="/reports">
-            <label tabIndex={0} className="btn m-1 btn-sm btn-neutral lg:btn-lg">
+            <label
+              tabIndex={0}
+              className="btn m-1 btn-sm btn-neutral lg:btn-lg"
+            >
               Reports
             </label>
           </Link>
           <Link href="/profile">
-            <label tabIndex={0} className="btn m-1 btn-sm btn-neutral lg:btn-lg">
+            <label
+              tabIndex={0}
+              className="btn m-1 btn-sm btn-neutral lg:btn-lg"
+            >
               Profile
             </label>
           </Link>

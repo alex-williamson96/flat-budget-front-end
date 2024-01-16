@@ -1,8 +1,20 @@
-import { useEffect } from "react";
 import { Category } from "../../routes/budget";
 import CurrencyDisplay from "../UI/Helper/CurrencyDisplay";
-import useBudgetStore from "../../stores/budget-store";
 import BudgetTableInput from "./BudgetTableInput";
+import useBudgetTableStore from "../../stores/budget-table-store";
+import CategoryService from "../../services/category-service";
+import {
+  UseQueryResult,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "react-query";
+import useBudgetStore from "../../stores/budget-store";
+
+export interface Currency {
+  dollar: number;
+  cents: number;
+}
 
 interface BudgetTableRowProps {
   category: Category;
@@ -12,7 +24,18 @@ interface BudgetTableRowProps {
   sumCentsActivity: number;
   sumDollarsAvailable: number;
   sumCentsAvailable: number;
+  budgetTableId: number;
+  onRowUpdate: (category: Category) => void;
 }
+
+const useCategory = (category: Category) => {
+  return useQuery(
+    "category/" + category.id,
+    () => CategoryService.updateAssignedValues(category),
+
+    { staleTime: 600000 }
+  );
+};
 
 const BudgetTableRow = ({
   category,
@@ -21,21 +44,53 @@ const BudgetTableRow = ({
   sumDollarsActivity,
   sumCentsActivity,
   sumDollarsAvailable,
-  sumCentsAvailable }: BudgetTableRowProps) => {
+  sumCentsAvailable,
+  budgetTableId,
+  onRowUpdate,
+}: BudgetTableRowProps) => {
+  // console.log('row updated: ', category.name)
 
-  const updateAssignedDollars = useBudgetStore((state) => state.updateAssignedDollar)
-  const updateAssignedCents = useBudgetStore((state) => state.updateAssignedCents)
+  // const updateCategory = useBudgetTableStore((state) => state.updateCategory);
+  const { setAssignedDollar, setAssignedCents } = useBudgetStore();
 
-  useEffect(() => {
-    updateAssignedCents(sumCentsAssigned)
-    updateAssignedDollars(sumDollarsAssigned)
+  const queryClient = useQueryClient();
 
-    console.log('this is running')
+  const {
+    isLoading: isUpdating,
+    mutate: updateCategoryAssignedValues,
+    isSuccess: isSuccess,
+  } = useMutation(
+    async (category: Category) => {
+      return CategoryService.updateAssignedValues(category);
+    },
+    {
+      onError: (err) => {
+        console.error(err);
+      },
+    }
+  );
 
-  }, [sumDollarsAssigned, sumCentsAssigned])
+  const handleRowUpdate = ({ dollar, cents }: Currency) => {
+    console.log("hanlding row update");
+    const updatedCategory = {
+      ...category,
+      dollarAssigned: dollar,
+      centsAssigned: cents,
+    };
+    onRowUpdate(updatedCategory);
+
+    updateCategoryAssignedValues(updatedCategory);
+
+    setTimeout(() => {
+      queryClient.refetchQueries({ queryKey: ["categoryAmount"] });
+    }, 500);
+
+    // setAssignedDollar(0);
+    // setAssignedCents(0);
+    // updateCategory(updatedCategory, budgetTableId);
+  };
 
   if (category.subOrder === 0) {
-
     return (
       <thead>
         <tr className="bg-base-200">
@@ -44,12 +99,27 @@ const BudgetTableRow = ({
           </th>
           <th className="text-base-content text-xl">{category.name}</th>
           <th></th>
-          <th><CurrencyDisplay dollar={sumDollarsAssigned} cents={sumCentsAssigned} /></th>
-          <th><CurrencyDisplay dollar={sumDollarsActivity} cents={sumCentsActivity} /></th>
-          <th><CurrencyDisplay dollar={sumDollarsAvailable} cents={sumCentsAvailable} /></th>
+          <th>
+            <CurrencyDisplay
+              dollar={sumDollarsAssigned}
+              cents={sumCentsAssigned}
+            />
+          </th>
+          <th>
+            <CurrencyDisplay
+              dollar={sumDollarsActivity}
+              cents={sumCentsActivity}
+            />
+          </th>
+          <th>
+            <CurrencyDisplay
+              dollar={sumDollarsAssigned - sumDollarsActivity}
+              cents={sumCentsAssigned - sumCentsActivity}
+            />
+          </th>
         </tr>
       </thead>
-    )
+    );
   }
 
   return (
@@ -60,12 +130,28 @@ const BudgetTableRow = ({
         </th>
         <th>{category.name}</th>
         <th>{category.notes}</th>
-        <th><BudgetTableInput dollar={category.dollarAssigned} cents={category.centsAssigned} /></th>
-        <th><CurrencyDisplay dollar={category.dollarActivity} cents={category.centsActivity} /></th>
-        <th><CurrencyDisplay dollar={category.dollarAvailable} cents={category.centsActivity} /></th>
+        <th>
+          <BudgetTableInput
+            dollar={category.dollarAssigned}
+            cents={category.centsAssigned}
+            onAssignedChanged={handleRowUpdate}
+          />
+        </th>
+        <th>
+          <CurrencyDisplay
+            dollar={category.dollarActivity}
+            cents={category.centsActivity}
+          />
+        </th>
+        <th>
+          <CurrencyDisplay
+            dollar={category.dollarAssigned - category.dollarActivity}
+            cents={category.centsAssigned - category.centsActivity}
+          />
+        </th>
       </tr>
     </tbody>
   );
-}
+};
 
 export default BudgetTableRow;

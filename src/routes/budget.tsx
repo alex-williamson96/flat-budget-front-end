@@ -2,6 +2,8 @@ import { UseQueryResult, useQuery } from "react-query";
 import BudgetService from "../services/budget-service";
 import BudgetTable from "../components/BudgetTable/BudgetTable";
 import { useParams } from "wouter";
+import useBudgetTableStore from "../stores/budget-table-store";
+import { useEffect } from "react";
 
 export interface Budget {
   id: number;
@@ -18,7 +20,7 @@ export interface BudgetTableDto {
 }
 
 export interface Category {
-  id?: number;
+  id: number;
   name: string;
   dollarAssigned: number;
   centsAssigned: number;
@@ -50,51 +52,49 @@ export interface Payee {
   name: string;
 }
 
-
 const useBudget = (): UseQueryResult<Budget> => {
-  return useQuery(
-    "budget",
-    BudgetService.getActiveBudget,
-    { staleTime: 300000 }
-  );
+  return useQuery("budget", BudgetService.getActiveBudget, {
+    staleTime: 300000,
+  });
 };
 
-
-
 const Budget = () => {
-  const { status, data, error } = useBudget();
+  const { status, data: budget, error } = useBudget();
 
-  const { year, month }: { year: string, month: string } = useParams();
+  // const { setBudgetTables, budgetTables } = useBudgetTableStore()
 
-  if (status === 'loading') {
-    return 'Loading...'
+  const { year, month }: { year: string; month: string } = useParams();
+
+  // useEffect(() => {
+  //   if (data === undefined || data.budgetTableList === null) return
+  //   return setBudgetTables(data.budgetTableList);
+  // }, [data])
+
+  if (status === "loading") {
+    return "Loading...";
   }
 
-  if (error || data === undefined) {
-    return 'Error loading budget :('
+  if (error || budget === undefined) {
+    return "Error loading budget :(";
   }
-
-  const budget = data;
 
   const budgetTableList = budget.budgetTableList;
 
-  
+  // setBudgetTables(budgetTableList)
 
   if (month) {
-    return (
-      budgetTableList.map(
-        budgetTable => (
-          (budgetTable.month === month && budgetTable.year === year) &&
+    return budgetTableList.map(
+      (budgetTable) =>
+        budgetTable.month === month &&
+        budgetTable.year === year && (
           <div className="p-2" key={budgetTable.id}>
-            <BudgetTable budget={budgetTable} />
+            <BudgetTable budgetTable={budgetTable} />
           </div>
         )
-      )
-    )
+    );
   }
 
-
-  return <div>Error Loading Budget</div>
-}
+  return <div>Error Loading Budget</div>;
+};
 
 export default Budget;

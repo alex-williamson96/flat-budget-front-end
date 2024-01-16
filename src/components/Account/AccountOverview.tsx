@@ -1,8 +1,8 @@
-import { useParams } from 'wouter';
-import AccountService from '../../services/account-service';
-import { UseQueryResult, useQuery } from 'react-query';
-import { Account } from '../../routes/accounts';
-import AccountTable from './AccountTable';
+import { useParams } from "wouter";
+import AccountService from "../../services/account-service";
+import { UseQueryResult, useQuery } from "react-query";
+import { Account } from "../../routes/accounts";
+import AccountTable from "./AccountTable";
 
 const useAccount = (): UseQueryResult<Account> => {
   const { accountId }: { accountId: string } = useParams();
@@ -16,17 +16,20 @@ const useAccount = (): UseQueryResult<Account> => {
 };
 
 export default function AccountOverview() {
+  const { status, data: account, error } = useAccount();
 
-  const { status, data, error } = useAccount();
-
-  if (status === 'loading') {
-    return <div>Loading</div>
+  if (status === "loading") {
+    return <div>Loading</div>;
   }
-  if (error || data === undefined) {
+  if (error || account === undefined) {
     return <p>Error occurred while fetching data</p>;
   }
 
   return (
-    <AccountTable accountData={data} isOverview={false} isTracking={data.onBudget} />
-  )
+    <AccountTable
+      accountData={account}
+      isOverview={false}
+      isTracking={account.onBudget}
+    />
+  );
 }
