@@ -26,8 +26,13 @@ const updateAssignedValues = async (category: Category) => {
   return await requestHelper.put(`/${category.id}/assigned`, category);
 };
 
+const updateCategoryName = async (name: string, id: number) => {
+  return await requestHelper.put(`/${id}/name`, { name: name });
+};
+
 const CategoryService = {
   updateAssignedValues,
+  updateCategoryName,
 };
 
 export default CategoryService;

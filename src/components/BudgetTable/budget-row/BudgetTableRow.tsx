@@ -1,15 +1,9 @@
-import { Category } from "../../routes/budget";
-import CurrencyDisplay from "../UI/Helper/CurrencyDisplay";
+import { Category } from "../../../routes/budget";
+import CurrencyDisplay from "../../UI/Helper/CurrencyDisplay";
 import BudgetTableInput from "./BudgetTableInput";
-import useBudgetTableStore from "../../stores/budget-table-store";
-import CategoryService from "../../services/category-service";
-import {
-  UseQueryResult,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from "react-query";
-import useBudgetStore from "../../stores/budget-store";
+import CategoryService from "../../../services/category-service";
+import { useMutation, useQueryClient } from "react-query";
+import BudgetRowName from "./BudgetRowName";
 
 export interface Currency {
   dollar: number;
@@ -28,15 +22,6 @@ interface BudgetTableRowProps {
   onRowUpdate: (category: Category) => void;
 }
 
-const useCategory = (category: Category) => {
-  return useQuery(
-    "category/" + category.id,
-    () => CategoryService.updateAssignedValues(category),
-
-    { staleTime: 600000 }
-  );
-};
-
 const BudgetTableRow = ({
   category,
   sumDollarsAssigned,
@@ -51,43 +36,42 @@ const BudgetTableRow = ({
   // console.log('row updated: ', category.name)
 
   // const updateCategory = useBudgetTableStore((state) => state.updateCategory);
-  const { setAssignedDollar, setAssignedCents } = useBudgetStore();
+  // const { setAssignedDollar, setAssignedCents } = useBudgetStore();
 
   const queryClient = useQueryClient();
 
-  const {
-    isLoading: isUpdating,
-    mutate: updateCategoryAssignedValues,
-    isSuccess: isSuccess,
-  } = useMutation(
-    async (category: Category) => {
-      return CategoryService.updateAssignedValues(category);
-    },
+  const { mutate: updateCategoryAssignedValues } = useMutation(
+    async (category: Category) =>
+      CategoryService.updateAssignedValues(category),
     {
       onError: (err) => {
         console.error(err);
       },
+      onSuccess: () => {
+        queryClient.refetchQueries({ queryKey: ["categoryAmount"] });
+      },
     }
   );
 
-  const handleRowUpdate = ({ dollar, cents }: Currency) => {
-    console.log("hanlding row update");
+  const handleRowAssignedValuesUpdate = ({ dollar, cents }: Currency) => {
     const updatedCategory = {
       ...category,
       dollarAssigned: dollar,
       centsAssigned: cents,
     };
+
     onRowUpdate(updatedCategory);
 
     updateCategoryAssignedValues(updatedCategory);
+  };
 
-    setTimeout(() => {
-      queryClient.refetchQueries({ queryKey: ["categoryAmount"] });
-    }, 500);
+  const handleRowNameChange = (name: string) => {
+    const updatedCategory = {
+      ...category,
+      name: name,
+    };
 
-    // setAssignedDollar(0);
-    // setAssignedCents(0);
-    // updateCategory(updatedCategory, budgetTableId);
+    onRowUpdate(updatedCategory);
   };
 
   if (category.subOrder === 0) {
@@ -97,7 +81,15 @@ const BudgetTableRow = ({
           <th className="w-0">
             <input type="checkbox" className="checkbox" />
           </th>
-          <th className="text-base-content text-xl">{category.name}</th>
+          <th className="text-base-content text-xl">
+            {
+              <BudgetRowName
+                categoryId={category.id}
+                categoryName={category.name}
+                onCategoryNameChange={handleRowNameChange}
+              />
+            }
+          </th>
           <th></th>
           <th>
             <CurrencyDisplay
@@ -128,13 +120,21 @@ const BudgetTableRow = ({
         <th className="w-0">
           <input type="checkbox" className="checkbox" />
         </th>
-        <th>{category.name}</th>
+        <th>
+          {
+            <BudgetRowName
+              categoryId={category.id}
+              categoryName={category.name}
+              onCategoryNameChange={handleRowNameChange}
+            />
+          }
+        </th>
         <th>{category.notes}</th>
         <th>
           <BudgetTableInput
             dollar={category.dollarAssigned}
             cents={category.centsAssigned}
-            onAssignedChanged={handleRowUpdate}
+            onAssignedChanged={handleRowAssignedValuesUpdate}
           />
         </th>
         <th>

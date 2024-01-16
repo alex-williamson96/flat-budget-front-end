@@ -1,4 +1,4 @@
-import { Currency } from "../components/BudgetTable/BudgetTableRow";
+import { Currency } from "../components/BudgetTable/budget-row/BudgetTableRow";
 import { RequestHelper } from "./requests";
 
 const baseURL = "http://localhost:8080/api/v1/budget/";

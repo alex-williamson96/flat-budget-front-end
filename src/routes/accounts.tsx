@@ -53,7 +53,8 @@ export default function Accounts() {
           }}
         >
           Create Account
-        </button><dialog id="createAccountModal" className={`modal bg-transparent`}>
+        </button>
+        <dialog id="createAccountModal" className={`modal bg-transparent`}>
           <form method="dialog" className={`modal-box modal-bottom sm:modal-middle`}>
             <CreateAccount />
             <div className="modal-action">

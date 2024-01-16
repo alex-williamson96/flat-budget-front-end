@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Budget, { Category } from "../../routes/budget";
-import BudgetTableRow from "./BudgetTableRow";
+import BudgetTableRow from "./budget-row/BudgetTableRow";
 import useBudgetStore from "../../stores/budget-store";
 
 interface BudgetTableSectionProps {
@@ -29,7 +29,6 @@ const BudgetTableSection = ({
   } = useBudgetStore();
 
   useEffect(() => {
-    console.log("useEffect running");
     const newSumDollarsAssigned = categoryList.reduce(
       (totalDollars, category) => totalDollars + category.dollarAssigned,
       0

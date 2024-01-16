@@ -6,7 +6,7 @@ import CurrencyDisplay from "../../UI/Helper/CurrencyDisplay";
 import useBudgetStore from "../../../stores/budget-store";
 import { UseQueryResult, useQuery } from "react-query";
 import BudgetService from "../../../services/budget-service";
-import { Currency } from "../../BudgetTable/BudgetTableRow";
+import { Currency } from "../../BudgetTable/budget-row/BudgetTableRow";
 
 const useCategoryAmount = (
   budgetYear: string,
