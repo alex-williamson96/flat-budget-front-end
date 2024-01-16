@@ -1,6 +1,9 @@
 import { BudgetTableDto, Category } from "../../routes/budget";
 import useBudgetStore from "../../stores/budget-store";
 import BudgetTableSection from "./BudgetTableSection";
+import NewCategoryButton from "./budget-row/NewCategoryButton";
+import useIsMobile from "../../hooks/useIsMobile";
+import { useState } from "react";
 
 interface CategorizedCategories {
   [mainOrder: number]: Category[];
@@ -11,6 +14,10 @@ interface BudgetTableProps {
 }
 
 const BudgetTable = ({ budgetTable }: BudgetTableProps) => {
+  const [isHovered, setIsHovered] = useState(false);
+
+  const { isMobile } = useIsMobile();
+
   const categorizedCategories =
     budgetTable.categoryList.reduce<CategorizedCategories>(
       (result, category) => {
@@ -29,12 +36,28 @@ const BudgetTable = ({ budgetTable }: BudgetTableProps) => {
   return (
     <div className="overflow-x-auto rounded-lg border border-neutral">
       <table className="table table-compact w-full table-auto">
-        <thead>
+        <thead className="group">
           <tr className="bg-base-300 text-base-content text-lg">
             <th className="w-0">
               <input type="checkbox" className="checkbox" />
             </th>
-            <th>Category</th>
+            <th
+              className="relative"
+              onMouseEnter={() => setIsHovered(true)}
+              onMouseLeave={() => setIsHovered(false)}
+            >
+              Category
+              <span
+                className={`pl-2 tooltip ${
+                  isHovered || isMobile
+                    ? "visible opacity-100"
+                    : "invisible opacity-0"
+                } tooltip-right`}
+                data-tip="Add new category"
+              >
+                {<NewCategoryButton mainOrder={0} categoryId={0} />}
+              </span>
+            </th>
             <th></th>
             <th>Assigned</th>
             <th>Activity</th>

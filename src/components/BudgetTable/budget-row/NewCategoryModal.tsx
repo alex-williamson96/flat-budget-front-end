@@ -29,6 +29,7 @@ const NewCategoryModal = ({ mainOrder, categoryId }: NewCategoryModalProps) => {
     {
       onSuccess: () => {
         queryClient.refetchQueries({ queryKey: ["budget"] });
+        setCategoryName("");
         const modal = document.getElementById(
           `button-${categoryId}-new`
         ) as HTMLFormElement;
