@@ -7,6 +7,19 @@
 /bazel-out
 /.fleet
 
+.fleet
+dist/
+.fleet/
+./fleet
+
+/dist/
+
+*/config.json
+
+./config.json
+
+config.json/
+
 # Node
 npm-debug.log
 yarn-error.log
@@ -42,3 +55,9 @@ testem.log
 .DS_Store
 Thumbs.db
 node_modules
+!/config.json
+!/.idea/
+
+.idea
+config.json
+
