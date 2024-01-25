@@ -52,14 +52,18 @@ export interface Payee {
   name: string;
 }
 
-const useBudget = (): UseQueryResult<Budget> => {
-  return useQuery("budget", BudgetService.getActiveBudget, {
+const Budget = () => {
+  // const { status, data: budget, error } = useBudget();
+
+  const {
+    status,
+    data: budget,
+    error,
+  } = useQuery({
+    queryKey: "budget",
+    queryFn: BudgetService.getActiveBudget,
     staleTime: 300000,
   });
-};
-
-const Budget = () => {
-  const { status, data: budget, error } = useBudget();
 
   // const { setBudgetTables, budgetTables } = useBudgetTableStore()
 
@@ -84,9 +88,7 @@ const Budget = () => {
         budgetTable.month === month &&
         budgetTable.year === year && (
           <div className="p-2" key={budgetTable.id}>
-            <BudgetTable
-              budgetTable={budgetTable}
-            />
+            <BudgetTable budgetTable={budgetTable} />
           </div>
         )
     );

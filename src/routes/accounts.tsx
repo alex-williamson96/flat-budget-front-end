@@ -17,17 +17,13 @@ export interface Account {
   transactionList: any;
 }
 
-const useAccounts = (): UseQueryResult<Account[]> => {
-  return useQuery(
-    "accounts",
-    AccountService.findAll,
-    { staleTime: 300000 }
-  );
-};
-
 export default function Accounts() {
 
-  const { status, data, error } = useAccounts();
+  const { status, data, error } = useQuery({
+    queryKey: "accounts",
+    queryFn: AccountService.findAll,
+    staleTime: 300000,
+  });
 
   const { budgetAccounts, trackingAccounts } = useAccountFiltering(data || [])
 

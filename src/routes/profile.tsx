@@ -1,9 +1,7 @@
-import { AxiosError, AxiosResponse } from "axios";
-import { UseQueryResult, useQuery, useQueryClient } from "react-query";
+import { useQuery } from "react-query";
 import UserService from "../services/user-service";
 import { useAuth0 } from "@auth0/auth0-react";
 import LogoutButton from "../components/Login/LogoutButton";
-
 
 export interface UserProfile {
   accountList?: any;
@@ -21,37 +19,32 @@ export interface UserProfile {
   updatedDate: string;
 }
 
-const useUser = (): UseQueryResult<UserProfile> => {
-  return useQuery(
-    "user",
-    UserService.getCurrentUser,
-    { staleTime: 300000 }
-  );
-};
-
 const Profile = () => {
-  const { status, data } = useUser();
+  const { status, data } = useQuery({
+    queryKey: "user",
+    queryFn: UserService.getCurrentUser,
+    staleTime: 300000,
+  });
 
-  const { user, isAuthenticated, isLoading, getAccessTokenSilently } = useAuth0();
+  const { user, isAuthenticated, isLoading } = useAuth0();
 
   if (isLoading) {
     return <div>Loading ...</div>;
   }
 
   return (
-    (isAuthenticated && user) && (
+    isAuthenticated &&
+    user && (
       <div>
         <LogoutButton />
         <img src={user.picture} alt={user.nickname} />
         <h2>{user.name}</h2>
         <p>{user.email}</p>
         <div>
-          {(status === "loading") ? (
+          {status === "loading" ? (
             "Loading..."
           ) : (
-            <span>
-              Profile works!  {JSON.stringify(data)}
-            </span>
+            <span>Profile works! {JSON.stringify(data)}</span>
           )}
         </div>
       </div>

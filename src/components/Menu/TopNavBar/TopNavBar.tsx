@@ -4,28 +4,8 @@ import RightArrow from "../../UI/Icons/RightArrow";
 import { Link } from "wouter";
 import CurrencyDisplay from "../../UI/Helper/CurrencyDisplay";
 import useBudgetStore from "../../../stores/budget-store";
-import { UseQueryResult, useQuery } from "react-query";
+import { useQuery } from "react-query";
 import BudgetService from "../../../services/budget-service";
-import { Currency } from "../../BudgetTable/budget-row/BudgetTableRow";
-
-const useCategoryAmount = (
-  budgetYear: string,
-  budgetMonth: string
-): UseQueryResult<Currency> => {
-  return useQuery(
-    "categoryAmount",
-    () => BudgetService.getBudgetAmount(budgetYear, budgetMonth),
-    {
-      staleTime: 600000,
-    }
-  );
-};
-
-const useAccoutsAmount = (): UseQueryResult<Currency> => {
-  return useQuery("accountsAmount", () => BudgetService.getAssignedAmount(), {
-    staleTime: 600000,
-  });
-};
 
 export default function TopNavBar() {
   const budgetYear = useBudgetStore((state) => state.year);
@@ -36,13 +16,21 @@ export default function TopNavBar() {
     data: budgetAmount,
     status: budgetAmountStatus,
     error: budgetAmountError,
-  } = useAccoutsAmount();
+  } = useQuery({
+    queryKey: "accountsAmount",
+    queryFn: () => BudgetService.getAssignedAmount(),
+    staleTime: 600000,
+  });
 
   const {
     data: assignedAmount,
     status: assignedAmountStatus,
     error: assignedAmountError,
-  } = useCategoryAmount(budgetYear, budgetMonth);
+  } = useQuery({
+    queryKey: "categoryAmount",
+    queryFn: () => BudgetService.getBudgetAmount(budgetYear, budgetMonth),
+    staleTime: 600000,
+  });
 
   const loadingAssign = () => {
     return <p>Loading...</p>;

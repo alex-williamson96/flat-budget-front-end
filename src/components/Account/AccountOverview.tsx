@@ -1,24 +1,22 @@
 import { useParams } from "wouter";
 import AccountService from "../../services/account-service";
-import { UseQueryResult, useQuery } from "react-query";
-import { Account } from "../../routes/accounts";
+import { useQuery } from "react-query";
 import AccountTable from "./AccountTable";
 
-const useAccount = (): UseQueryResult<Account> => {
+export default function AccountOverview() {
   const { accountId }: { accountId: string } = useParams();
 
-  return useQuery(
-    "account/" + accountId,
-    () => AccountService.findById(accountId),
+  const {
+    isLoading,
+    data: account,
+    error,
+  } = useQuery({
+    queryKey: `account/${accountId}`,
+    queryFn: () => AccountService.findById(accountId),
+    staleTime: 60000,
+  });
 
-    { staleTime: 600000 }
-  );
-};
-
-export default function AccountOverview() {
-  const { status, data: account, error } = useAccount();
-
-  if (status === "loading") {
+  if (isLoading) {
     return <div>Loading</div>;
   }
   if (error || account === undefined) {
